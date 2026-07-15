@@ -1,0 +1,655 @@
+:root {
+  --stage-surge: #9ddcf0;
+  --mark-surge: #3155ff;
+  --stage-resurge: #9be3d3;
+  --foil: #d7dae0;
+  --milk: #f4f6f2;
+  --carbon: #111318;
+  --pulse: #ff6a2b;
+  --white: #ffffff;
+  --error: #8f1d05;
+  --display: "Helvetica Neue", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --mono: "IBM Plex Mono", "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --gutter: max(18px, env(safe-area-inset-left));
+  --rule: 1px solid var(--carbon);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  background: var(--milk);
+  color: var(--carbon);
+  scroll-behavior: smooth;
+  scroll-padding-top: calc(var(--header-height) + 16px);
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  min-width: 0;
+  margin: 0;
+  overflow-x: hidden;
+  background: var(--milk);
+  color: var(--carbon);
+  font-family: var(--mono);
+  font-size: 16px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: rgba(17, 19, 24, 0.14);
+}
+
+button,
+input {
+  font: inherit;
+}
+
+button,
+a {
+  touch-action: manipulation;
+}
+
+button {
+  cursor: pointer;
+}
+
+a {
+  color: inherit;
+}
+
+::selection {
+  background: var(--carbon);
+  color: var(--white);
+}
+
+:focus-visible {
+  outline: 3px solid var(--mark-surge);
+  outline-offset: 3px;
+}
+
+.visually-hidden {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+.skip-link {
+  position: fixed;
+  z-index: 100;
+  top: 8px;
+  left: 8px;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  padding: 0 16px;
+  border: var(--rule);
+  background: var(--white);
+  color: var(--carbon);
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  text-decoration: none;
+  transform: translateY(-160%);
+}
+
+.skip-link:focus-visible {
+  transform: translateY(0);
+}
+
+.dossier {
+  min-height: calc(100dvh - var(--header-height));
+  display: grid;
+  grid-template-areas:
+    "copy"
+    "object"
+    "signup"
+    "specs";
+  background: var(--white);
+}
+
+.dossier-copy {
+  grid-area: copy;
+  padding: 40px max(18px, env(safe-area-inset-right)) 48px max(18px, env(safe-area-inset-left));
+  background: var(--white);
+}
+
+.eyebrow,
+.dossier-specs dt,
+.signup label {
+  margin: 0;
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 600;
+  line-height: 1.4;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.dossier-copy h1 {
+  max-width: 10ch;
+  margin: 0;
+  font-family: var(--display);
+  font-size: clamp(46px, 15vw, 68px);
+  font-weight: 800;
+  line-height: 0.92;
+  letter-spacing: -0.06em;
+  text-wrap: balance;
+}
+
+.dossier-lede {
+  margin: 24px 0 32px;
+  display: grid;
+  gap: 4px;
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 1.45;
+}
+
+.dossier-lede span {
+  display: block;
+}
+
+.dossier-lede-detail {
+  margin-top: 0;
+  font-weight: 400;
+}
+
+.formula-toggle {
+  width: min(100%, 440px);
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  border: var(--rule);
+}
+
+.formula-button {
+  min-width: 0;
+  min-height: 76px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 5px;
+  padding: 12px;
+  border: 0;
+  border-right: var(--rule);
+  border-radius: 0;
+  background: var(--white);
+  color: var(--carbon);
+}
+
+.formula-button:last-child {
+  border-right: 0;
+}
+
+.formula-button:hover:not(.is-active) {
+  background: var(--milk);
+}
+
+.formula-button:active {
+  filter: brightness(0.96);
+}
+
+.formula-button span {
+  overflow-wrap: anywhere;
+  font-family: var(--display);
+  font-size: clamp(17px, 6vw, 24px);
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: -0.05em;
+}
+
+.formula-button small {
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.formula-button.is-active[data-formula="surge"] {
+  background: var(--stage-surge);
+}
+
+.formula-button.is-active[data-formula="resurge"] {
+  background: var(--stage-resurge);
+}
+
+.dossier-object {
+  grid-area: object;
+  position: relative;
+  min-width: 0;
+  min-height: clamp(360px, 116vw, 440px);
+  display: grid;
+  place-items: center;
+  margin: 0;
+  padding: 48px max(18px, env(safe-area-inset-right)) 48px
+    max(18px, env(safe-area-inset-left));
+  overflow: hidden;
+  border-top: var(--rule);
+  border-bottom: var(--rule);
+  background: var(--stage-surge);
+  color: var(--carbon);
+  transition: background-color 220ms ease-out;
+}
+
+.dossier-object[data-formula-stage="resurge"] {
+  background: var(--stage-resurge);
+}
+
+.measured-object {
+  position: relative;
+  z-index: 1;
+  width: min(88%, 360px);
+  aspect-ratio: 1.68;
+  display: grid;
+  place-items: center;
+}
+
+/* The aluminum case is the established product design. */
+.product-case {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1.68;
+  border: 1px solid rgba(17, 19, 24, 0.35);
+  border-radius: 24px 24px 19px 19px;
+  overflow: hidden;
+  background:
+    linear-gradient(115deg, transparent 16%, rgba(255, 255, 255, 0.75) 36%, transparent 53%),
+    linear-gradient(180deg, #edf0f4 0%, #bec2ca 51%, #f7f8fa 55%, #b8bdc5 100%);
+  color: var(--carbon);
+  box-shadow:
+    0 42px 55px rgba(20, 25, 43, 0.27),
+    inset 0 1px 1px rgba(255, 255, 255, 0.9),
+    inset 0 -2px 2px rgba(17, 19, 24, 0.16);
+  transform: rotate(8deg) perspective(900px) rotateX(var(--tilt-y, 0deg))
+    rotateY(var(--tilt-x, 0deg));
+  transform-origin: center;
+  transition: transform 240ms var(--ease);
+  will-change: transform;
+}
+
+.product-case::before {
+  content: "";
+  position: absolute;
+  inset: 13px 10px auto;
+  height: 1px;
+  background: rgba(17, 19, 24, 0.25);
+  box-shadow: 0 2px 0 rgba(255, 255, 255, 0.65);
+}
+
+.case-mark {
+  position: absolute;
+  top: 25%;
+  left: 7%;
+  color: var(--carbon);
+  font-family: var(--display);
+  font-size: clamp(36px, 14vw, 72px);
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: -0.1em;
+  transform: scaleX(0.76);
+  transform-origin: left center;
+}
+
+.case-detail {
+  position: absolute;
+  bottom: 15%;
+  left: 8%;
+  font-family: var(--mono);
+  font-size: clamp(6px, 2.2vw, 10px);
+  letter-spacing: 0.09em;
+}
+
+.case-notch {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 48px;
+  height: 8px;
+  border-radius: 0 0 10px 10px;
+  background: rgba(17, 19, 24, 0.17);
+  transform: translateX(-50%);
+}
+
+.signup-panel {
+  grid-area: signup;
+  display: grid;
+  gap: 16px;
+  padding: 24px max(18px, env(safe-area-inset-right));
+  background: var(--white);
+  scroll-margin-top: 16px;
+}
+
+.signup-title {
+  margin: 0;
+  font-family: var(--display);
+  font-size: 16px;
+  font-weight: 800;
+  line-height: 1.2;
+  letter-spacing: -0.025em;
+}
+
+.signup {
+  width: 100%;
+  max-width: 620px;
+}
+
+.signup label {
+  display: block;
+  margin-bottom: 8px;
+}
+
+.input-row {
+  display: grid;
+  gap: 0;
+  border: var(--rule);
+  transition:
+    border-color 180ms ease-out,
+    box-shadow 180ms ease-out;
+}
+
+.input-row input,
+.input-row button {
+  min-width: 0;
+  min-height: 52px;
+  border: 0;
+  border-radius: 0;
+}
+
+.input-row input:focus-visible,
+.input-row button:focus-visible {
+  outline: 0;
+}
+
+.input-row:focus-within {
+  border-color: var(--mark-surge);
+  box-shadow: 0 0 0 2px var(--mark-surge);
+}
+
+.input-row input {
+  width: 100%;
+  padding: 0 14px;
+  background: var(--white);
+  color: var(--carbon);
+  font-size: 16px;
+}
+
+.input-row input::placeholder {
+  color: #5d6067;
+  opacity: 1;
+}
+
+.input-row input[aria-invalid="true"] {
+  box-shadow: none;
+}
+
+.input-row:has(input[aria-invalid="true"]) {
+  border-color: var(--error);
+  box-shadow: 0 0 0 1px var(--error);
+}
+
+.input-row button {
+  padding: 0 18px;
+  border-top: var(--rule);
+  background: var(--carbon);
+  color: var(--white);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.input-row button:hover:not(:disabled) {
+  background: var(--stage-surge);
+  color: var(--carbon);
+}
+
+.input-row button:active:not(:disabled) {
+  background: var(--stage-resurge);
+}
+
+.input-row button:disabled {
+  cursor: default;
+  opacity: 0.55;
+}
+
+.form-message {
+  min-height: 16px;
+  margin: 8px 0 0;
+  font-size: 11px;
+  line-height: 1.45;
+}
+
+.form-message:empty {
+  visibility: hidden;
+}
+
+.form-message.is-error {
+  color: var(--error);
+  font-weight: 600;
+}
+
+.form-message.is-success {
+  color: var(--carbon);
+  font-weight: 600;
+}
+
+.dossier-specs {
+  grid-area: specs;
+  display: grid;
+  grid-template-columns: 1fr;
+  margin: 0;
+  border-top: var(--rule);
+  background: var(--carbon);
+  color: var(--white);
+}
+
+.dossier-specs > div {
+  min-width: 0;
+  display: grid;
+  grid-template-columns: minmax(88px, 0.38fr) minmax(0, 1fr);
+  gap: 8px;
+  padding: 16px max(18px, env(safe-area-inset-right)) 16px max(18px, env(safe-area-inset-left));
+  border-bottom: 1px solid rgba(255, 255, 255, 0.34);
+}
+
+.dossier-specs > div:last-child {
+  border-bottom: 0;
+}
+
+.dossier-specs dt,
+.dossier-specs dd {
+  margin: 0;
+}
+
+.dossier-specs dt {
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.dossier-specs dd {
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+@media (min-width: 480px) {
+  .input-row {
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 0;
+  }
+
+  .input-row button {
+    border-top: 0;
+    border-left: var(--rule);
+  }
+
+  .dossier-specs {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .dossier-specs > div {
+    min-height: 84px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 8px;
+    border-right: 1px solid rgba(255, 255, 255, 0.34);
+    border-bottom: 0;
+  }
+
+  .dossier-specs > div:last-child {
+    border-right: 0;
+  }
+}
+
+@media (min-width: 768px) {
+  .dossier-copy,
+  .signup-panel {
+    padding-right: max(40px, env(safe-area-inset-right));
+    padding-left: max(40px, env(safe-area-inset-left));
+  }
+
+  .dossier-copy {
+    padding-top: 56px;
+    padding-bottom: 64px;
+  }
+
+  .signup-panel {
+    padding-top: 32px;
+    padding-bottom: 32px;
+  }
+
+  .dossier-copy h1 {
+    font-size: clamp(64px, 9vw, 88px);
+  }
+
+  .dossier-lede {
+    font-size: 18px;
+  }
+
+  .dossier-object {
+    min-height: 620px;
+  }
+
+  .measured-object {
+    width: min(76%, 580px);
+  }
+
+  .case-mark {
+    font-size: clamp(70px, 10vw, 112px);
+  }
+
+  .case-detail {
+    font-size: clamp(8px, 1vw, 11px);
+  }
+
+}
+
+@media (min-width: 1060px) {
+  .dossier {
+    grid-template-columns: minmax(390px, 0.8fr) minmax(560px, 1.2fr);
+    grid-template-rows: auto minmax(min-content, 1fr) auto;
+    grid-template-areas:
+      "copy object"
+      "signup object"
+      "specs specs";
+  }
+
+  .dossier-copy {
+    padding: clamp(48px, 5vw, 80px) clamp(36px, 4vw, 64px) 0;
+    border-right: var(--rule);
+  }
+
+  .dossier-copy h1 {
+    font-size: clamp(60px, 5.4vw, 80px);
+  }
+
+  .dossier-lede {
+    margin-top: 24px;
+    margin-bottom: 32px;
+    font-size: clamp(16px, 1.3vw, 20px);
+  }
+
+  .signup-panel {
+    align-content: start;
+    gap: 16px;
+    padding: 32px clamp(36px, 4vw, 64px);
+    border-right: var(--rule);
+  }
+
+  .dossier-object {
+    min-height: 720px;
+    border-top: 0;
+    border-bottom: 0;
+  }
+
+  .measured-object {
+    width: min(82%, 620px);
+  }
+
+  .case-mark {
+    font-size: clamp(68px, 8vw, 118px);
+  }
+
+  .dossier-specs > div {
+    padding-right: clamp(28px, 4vw, 56px);
+    padding-left: clamp(28px, 4vw, 56px);
+  }
+}
+
+@media (max-height: 560px) and (orientation: landscape) and (max-width: 1059px) {
+  .dossier-object {
+    min-height: 480px;
+  }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .input-row:hover:not(:has(input[aria-invalid="true"])) {
+    border-color: var(--mark-surge);
+    box-shadow: 0 0 0 1px var(--mark-surge);
+  }
+
+  .dossier-object,
+  .dossier-object[data-formula-stage="resurge"] {
+    background: var(--foil);
+  }
+
+  .dossier-object[data-formula-stage="surge"]:hover,
+  .dossier:has(.formula-button[data-formula="surge"]:focus-visible)
+    .dossier-object[data-formula-stage="surge"] {
+    background: var(--stage-surge);
+  }
+
+  .dossier-object[data-formula-stage="resurge"]:hover,
+  .dossier:has(.formula-button[data-formula="resurge"]:focus-visible)
+    .dossier-object[data-formula-stage="resurge"] {
+    background: var(--stage-resurge);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+
+  .product-case {
+    transform: rotate(8deg);
+  }
+}

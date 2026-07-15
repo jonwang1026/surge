@@ -1,0 +1,4 @@
+.DS_Store
+
+# Keep editable campaign originals local; the site deploys the optimized WebP files.
+assets/campaign/*.png

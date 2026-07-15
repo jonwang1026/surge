@@ -1,0 +1,126 @@
+const FORMULAS = {
+  surge: {
+    name: "SURGE",
+    detail: "Caffeinated",
+    caseDetail: "POCKET GUM / S—01",
+    caption: "A brushed aluminum SURGE pocket case on a SURGE Blue product stage.",
+    themeColor: "#9ddcf0",
+  },
+  resurge: {
+    name: "RESURGE",
+    detail: "Caffeine-free",
+    caseDetail: "CAFFEINE-FREE / R—01",
+    caption: "A brushed aluminum RESURGE pocket case on a RESURGE Teal product stage.",
+    themeColor: "#9be3d3",
+  },
+};
+
+const stage = document.querySelector(".dossier-object");
+const themeColor = document.querySelector('meta[name="theme-color"]');
+
+const setFormula = (formulaKey, updateUrl = true) => {
+  const formula = FORMULAS[formulaKey];
+  if (!formula || !stage) return;
+
+  document.querySelectorAll(".formula-button").forEach((candidate) => {
+    const isActive = candidate.dataset.formula === formulaKey;
+    candidate.classList.toggle("is-active", isActive);
+    candidate.setAttribute("aria-pressed", String(isActive));
+  });
+
+  stage.dataset.formulaStage = formulaKey;
+  document.querySelector(".product-case--dossier .case-mark").textContent = formula.name;
+  document.querySelector(".product-case--dossier .case-detail").textContent = formula.caseDetail;
+  document.querySelector("[data-formula-detail]").textContent = formula.detail;
+  document.querySelector("[data-product-caption]").textContent = formula.caption;
+  themeColor?.setAttribute("content", formula.themeColor);
+
+  if (updateUrl) {
+    const url = new URL(window.location.href);
+    if (formulaKey === "surge") url.searchParams.delete("formula");
+    else url.searchParams.set("formula", formulaKey);
+    window.history.replaceState({}, "", url);
+  }
+};
+
+document.querySelectorAll(".formula-button").forEach((button) => {
+  button.addEventListener("click", () => {
+    setFormula(button.dataset.formula);
+  });
+});
+
+const initialFormula = new URLSearchParams(window.location.search).get("formula");
+if (initialFormula && FORMULAS[initialFormula]) setFormula(initialFormula, false);
+
+const form = document.querySelector(".signup");
+
+if (form) {
+  const input = form.querySelector('input[type="email"]');
+  const message = form.querySelector(".form-message");
+
+  const clearMessage = () => {
+    message.textContent = "";
+    message.className = "form-message";
+    message.removeAttribute("role");
+  };
+
+  const showError = () => {
+    message.textContent = "Enter a valid email address.";
+    message.className = "form-message is-error";
+    message.setAttribute("role", "alert");
+    input.setAttribute("aria-invalid", "true");
+  };
+
+  input.addEventListener("blur", () => {
+    if (input.value && !input.validity.valid) showError();
+  });
+
+  input.addEventListener("input", () => {
+    if (input.validity.valid) {
+      input.removeAttribute("aria-invalid");
+      clearMessage();
+    }
+  });
+
+  form.addEventListener("submit", (event) => {
+    event.preventDefault();
+    clearMessage();
+
+    if (!input.validity.valid) {
+      showError();
+      input.focus();
+      return;
+    }
+
+    input.removeAttribute("aria-invalid");
+    message.textContent = "Prototype only—your email was not saved.";
+    message.className = "form-message is-success";
+  });
+}
+
+const supportsPointerTilt = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+const reducesMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+if (supportsPointerTilt && !reducesMotion) {
+  document.querySelectorAll("[data-tilt]").forEach((element) => {
+    let bounds;
+
+    element.addEventListener("pointerenter", () => {
+      bounds = element.getBoundingClientRect();
+    });
+
+    element.addEventListener("pointermove", (event) => {
+      bounds ??= element.getBoundingClientRect();
+      const x = (event.clientX - bounds.left) / bounds.width - 0.5;
+      const y = (event.clientY - bounds.top) / bounds.height - 0.5;
+      element.style.setProperty("--tilt-x", `${x * 7}deg`);
+      element.style.setProperty("--tilt-y", `${y * -7}deg`);
+    });
+
+    element.addEventListener("pointerleave", () => {
+      bounds = undefined;
+      element.style.removeProperty("--tilt-x");
+      element.style.removeProperty("--tilt-y");
+    });
+  });
+}

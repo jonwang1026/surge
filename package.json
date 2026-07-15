@@ -1,0 +1,7 @@
+{
+  "name": "surge-frontend-preview",
+  "private": true,
+  "scripts": {
+    "prototype": "python3 -m http.server 4173"
+  }
+}
