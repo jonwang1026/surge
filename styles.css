@@ -1,15 +1,16 @@
 :root {
   --stage-surge: #9ddcf0;
-  --mark-surge: #3155ff;
+  --mark-surge: #111318;
   --stage-resurge: #9be3d3;
   --foil: #d7dae0;
   --milk: #f4f6f2;
   --carbon: #111318;
   --pulse: #ff6a2b;
   --white: #ffffff;
-  --error: #8f1d05;
+  --error: #ff2e1f;
+  --error-text: #b42318;
   --display: "Helvetica Neue", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  --mono: "IBM Plex Mono", "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+  --mono: "IBM Plex Mono Local", "SFMono-Regular", Consolas, "Liberation Mono", monospace;
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
   --gutter: max(18px, env(safe-area-inset-left));
   --rule: 1px solid var(--carbon);
@@ -107,6 +108,8 @@ a {
 }
 
 .dossier {
+  --formula-accent: var(--stage-surge);
+  --control-width: 440px;
   min-height: calc(100dvh - var(--header-height));
   display: grid;
   grid-template-areas:
@@ -115,6 +118,10 @@ a {
     "signup"
     "specs";
   background: var(--white);
+}
+
+.dossier[data-formula="resurge"] {
+  --formula-accent: var(--stage-resurge);
 }
 
 .dossier-copy {
@@ -165,7 +172,7 @@ a {
 }
 
 .formula-toggle {
-  width: min(100%, 440px);
+  width: min(100%, var(--control-width));
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   border: var(--rule);
@@ -370,8 +377,8 @@ a {
 }
 
 .input-row:focus-within {
-  border-color: var(--mark-surge);
-  box-shadow: 0 0 0 2px var(--mark-surge);
+  border-color: var(--carbon);
+  box-shadow: 0 0 0 2px var(--carbon);
 }
 
 .input-row input {
@@ -379,11 +386,16 @@ a {
   padding: 0 14px;
   background: var(--white);
   color: var(--carbon);
+  font-family: var(--display);
   font-size: 16px;
+  font-weight: 400;
+  line-height: 1.5;
+  letter-spacing: 0;
 }
 
 .input-row input::placeholder {
   color: #5d6067;
+  letter-spacing: 0;
   opacity: 1;
 }
 
@@ -393,7 +405,7 @@ a {
 
 .input-row:has(input[aria-invalid="true"]) {
   border-color: var(--error);
-  box-shadow: 0 0 0 1px var(--error);
+  box-shadow: 0 0 0 2px var(--error);
 }
 
 .input-row button {
@@ -408,17 +420,42 @@ a {
 }
 
 .input-row button:hover:not(:disabled) {
-  background: var(--stage-surge);
+  background: var(--formula-accent);
   color: var(--carbon);
 }
 
 .input-row button:active:not(:disabled) {
-  background: var(--stage-resurge);
+  background: var(--formula-accent);
+  filter: brightness(0.96);
 }
 
 .input-row button:disabled {
   cursor: default;
   opacity: 0.55;
+}
+
+.signup-consent {
+  width: 100%;
+  max-width: none;
+  margin: 10px 0 0;
+  overflow-wrap: anywhere;
+  color: #494c53;
+  font-family: var(--mono);
+  font-size: 11px;
+  line-height: 1.5;
+  text-wrap: pretty;
+}
+
+.signup-trap {
+  position: absolute;
+  left: -10000px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+.signup[aria-busy="true"] {
+  cursor: wait;
 }
 
 .form-message {
@@ -433,13 +470,119 @@ a {
 }
 
 .form-message.is-error {
-  color: var(--error);
+  color: var(--error-text);
   font-weight: 600;
 }
 
 .form-message.is-success {
   color: var(--carbon);
   font-weight: 600;
+}
+
+.signup-confirmation {
+  width: min(100%, var(--control-width));
+  min-width: 0;
+  padding: 0;
+}
+
+.signup-confirmation h3 {
+  max-width: 100%;
+  margin: 0;
+  overflow-wrap: anywhere;
+  font-family: var(--display);
+  font-size: clamp(28px, 5vw, 40px);
+  font-weight: 800;
+  line-height: 0.98;
+  letter-spacing: -0.045em;
+  text-wrap: balance;
+}
+
+.signup-confirmation > p {
+  max-width: 38ch;
+  margin: 10px 0 0;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+.signup-reset {
+  max-width: 100%;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 16px;
+  margin-left: 0;
+  padding: 0 12px 0 0;
+  border: 0;
+  background: transparent;
+  color: var(--carbon);
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  line-height: 1.3;
+  text-align: center;
+  text-transform: uppercase;
+  white-space: normal;
+  transition: background-color 180ms ease-out;
+}
+
+.signup-reset:active {
+  background: var(--formula-accent);
+}
+
+.confirmation-page {
+  min-height: calc(100dvh - var(--header-height) - 64px);
+  display: grid;
+  place-items: center;
+  padding: clamp(40px, 10vw, 120px) max(18px, env(safe-area-inset-right))
+    clamp(48px, 10vw, 120px) max(18px, env(safe-area-inset-left));
+  background: var(--stage-surge);
+}
+
+.confirmation-card {
+  width: min(100%, 620px);
+  padding: clamp(24px, 6vw, 52px);
+  border: var(--rule);
+  background: var(--white);
+}
+
+.confirmation-card h1 {
+  max-width: 10ch;
+  margin: 0;
+  font-family: var(--display);
+  font-size: clamp(44px, 11vw, 84px);
+  font-weight: 800;
+  line-height: 0.92;
+  letter-spacing: -0.06em;
+  text-wrap: balance;
+}
+
+.confirmation-card p {
+  max-width: 42ch;
+  margin: 20px 0 0;
+  font-size: clamp(14px, 2.4vw, 17px);
+}
+
+.confirmation-card a {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  margin-top: 28px;
+  padding: 0 14px;
+  border: var(--rule);
+  background: var(--carbon);
+  color: var(--white);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.confirmation-card a:hover {
+  background: var(--stage-surge);
+  color: var(--carbon);
 }
 
 .dossier-specs {
@@ -612,26 +755,8 @@ a {
 }
 
 @media (hover: hover) and (pointer: fine) {
-  .input-row:hover:not(:has(input[aria-invalid="true"])) {
-    border-color: var(--mark-surge);
-    box-shadow: 0 0 0 1px var(--mark-surge);
-  }
-
-  .dossier-object,
-  .dossier-object[data-formula-stage="resurge"] {
-    background: var(--foil);
-  }
-
-  .dossier-object[data-formula-stage="surge"]:hover,
-  .dossier:has(.formula-button[data-formula="surge"]:focus-visible)
-    .dossier-object[data-formula-stage="surge"] {
-    background: var(--stage-surge);
-  }
-
-  .dossier-object[data-formula-stage="resurge"]:hover,
-  .dossier:has(.formula-button[data-formula="resurge"]:focus-visible)
-    .dossier-object[data-formula-stage="resurge"] {
-    background: var(--stage-resurge);
+  .signup-reset:hover {
+    background: var(--formula-accent);
   }
 }
 

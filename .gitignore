@@ -1,4 +1,13 @@
 .DS_Store
 
+# Local credentials and deployment overrides must never enter source control.
+.env
+.env.*
+!.env.example
+.vercel
+node_modules
+test-results
+playwright-report
+
 # Keep editable campaign originals local; the site deploys the optimized WebP files.
 assets/campaign/*.png

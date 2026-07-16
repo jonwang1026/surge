@@ -1,0 +1,11 @@
+Confirm {{{BRAND_NAME}}} early access
+
+Confirm that you want to receive early-access and product-launch emails from {{{BRAND_NAME}}}. This link expires in {{{EXPIRY}}}.
+
+Confirm early access:
+{{{CONFIRM_URL}}}
+
+If you did not request this, you can safely ignore this email. No marketing email will be sent unless you confirm.
+
+Privacy: {{{PRIVACY_URL}}}
+{{{POSTAL_ADDRESS}}}

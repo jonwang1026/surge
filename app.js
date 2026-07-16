@@ -16,6 +16,7 @@ const FORMULAS = {
 };
 
 const stage = document.querySelector(".dossier-object");
+const dossier = document.querySelector(".dossier");
 const themeColor = document.querySelector('meta[name="theme-color"]');
 
 const setFormula = (formulaKey, updateUrl = true) => {
@@ -28,6 +29,8 @@ const setFormula = (formulaKey, updateUrl = true) => {
     candidate.setAttribute("aria-pressed", String(isActive));
   });
 
+  document.documentElement.dataset.formula = formulaKey;
+  dossier.dataset.formula = formulaKey;
   stage.dataset.formulaStage = formulaKey;
   document.querySelector(".product-case--dossier .case-mark").textContent = formula.name;
   document.querySelector(".product-case--dossier .case-detail").textContent = formula.caseDetail;
@@ -56,7 +59,17 @@ const form = document.querySelector(".signup");
 
 if (form) {
   const input = form.querySelector('input[type="email"]');
+  const submitButton = form.querySelector('button[type="submit"]');
   const message = form.querySelector(".form-message");
+  const fields = form.querySelector("[data-signup-fields]");
+  const confirmation = form.querySelector("[data-signup-confirmation]");
+  const resetButton = confirmation.querySelector(".signup-reset");
+  const renderedAt = form.querySelector('input[name="renderedAt"]');
+  const company = form.querySelector('input[name="company"]');
+  const completeEmailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+
+  const hasCompleteEmail = () =>
+    input.validity.valid && completeEmailPattern.test(input.value.trim());
 
   const clearMessage = () => {
     message.textContent = "";
@@ -71,31 +84,95 @@ if (form) {
     input.setAttribute("aria-invalid", "true");
   };
 
+  const showTemporaryError = (
+    text = "Couldn’t send the confirmation email. Check your connection and try again.",
+  ) => {
+    message.textContent = text;
+    message.className = "form-message is-error";
+    message.setAttribute("role", "alert");
+  };
+
+  const setPending = (pending) => {
+    form.setAttribute("aria-busy", String(pending));
+    input.disabled = pending;
+    submitButton.disabled = pending;
+    submitButton.textContent = pending ? "Joining…" : "Join";
+  };
+
   input.addEventListener("blur", () => {
-    if (input.value && !input.validity.valid) showError();
+    if (input.value && !hasCompleteEmail()) showError();
   });
 
   input.addEventListener("input", () => {
-    if (input.validity.valid) {
+    if (hasCompleteEmail()) {
       input.removeAttribute("aria-invalid");
       clearMessage();
     }
   });
 
-  form.addEventListener("submit", (event) => {
+  input.addEventListener("keydown", (event) => {
+    if (event.key !== "Enter" || event.isComposing) return;
+
+    event.preventDefault();
+    form.requestSubmit();
+  });
+
+  form.addEventListener("submit", async (event) => {
     event.preventDefault();
     clearMessage();
 
-    if (!input.validity.valid) {
+    if (!hasCompleteEmail()) {
       showError();
       input.focus();
       return;
     }
 
     input.removeAttribute("aria-invalid");
-    message.textContent = "Prototype only—your email was not saved.";
-    message.className = "form-message is-success";
+    setPending(true);
+    try {
+      const response = await fetch("/api/early-access", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({
+          email: input.value.trim(),
+          company: company.value,
+          renderedAt: Number(renderedAt.value),
+        }),
+      });
+
+      if (response.status === 202) {
+        fields.hidden = true;
+        confirmation.hidden = false;
+        return;
+      }
+      if (response.status === 400) {
+        showError();
+        input.focus();
+        return;
+      }
+      if (response.status === 429) {
+        showTemporaryError("Too many attempts. Please wait and try again.");
+        return;
+      }
+      showTemporaryError();
+    } catch {
+      showTemporaryError();
+    } finally {
+      setPending(false);
+    }
   });
+
+  resetButton.addEventListener("click", () => {
+    confirmation.hidden = true;
+    fields.hidden = false;
+    form.reset();
+    renderedAt.value = String(Date.now());
+    clearMessage();
+    input.removeAttribute("aria-invalid");
+    input.focus();
+  });
+
+  renderedAt.value = String(Date.now());
 }
 
 const supportsPointerTilt = window.matchMedia("(hover: hover) and (pointer: fine)").matches;

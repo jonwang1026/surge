@@ -1,7 +1,31 @@
 {
   "name": "surge-frontend-preview",
+  "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
-    "prototype": "python3 -m http.server 4173"
+    "prototype": "node scripts/prototype-server.js",
+    "integration:local": "npx --yes vercel@latest dev --listen 4174",
+    "test": "node --test",
+    "test:browser": "playwright test",
+    "typecheck": "tsc -p jsconfig.json",
+    "lint:html": "html-validate index.html homepage/index.html earlyaccess/index.html earlyaccess/confirmed/index.html",
+    "lint:css": "stylelint \"**/*.css\"",
+    "lint:js": "node --check app.js && node --check confirmed.js && node --check api/*.js && node --check api/_lib/*.js && node --check scripts/*.js",
+    "validate": "npm run lint:html && npm run lint:css && npm run lint:js",
+    "check": "npm run validate && npm run typecheck && npm test && npm run test:browser"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "resend": "^6.17.2"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.61.1",
+    "@types/node": "^22.20.1",
+    "html-validate": "^11.5.6",
+    "stylelint": "^17.14.0",
+    "typescript": "^5.9.3"
   }
 }

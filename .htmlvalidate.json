@@ -1,0 +1,12 @@
+{
+  "extends": ["html-validate:recommended"],
+  "rules": {
+    "attribute-boolean-style": ["error", { "style": "omit" }],
+    "attribute-empty-style": ["error", { "style": "omit" }],
+    "aria-label-misuse": "off",
+    "doctype-style": ["error", { "style": "lowercase" }],
+    "long-title": "off",
+    "no-inline-style": "error",
+    "void-style": "off"
+  }
+}

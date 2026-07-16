@@ -1,5 +1,42 @@
+@font-face {
+  font-family: "IBM Plex Mono Local";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/assets/fonts/ibm-plex-mono-latin-400-normal.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "IBM Plex Mono Local";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("/assets/fonts/ibm-plex-mono-latin-500-normal.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "IBM Plex Mono Local";
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url("/assets/fonts/ibm-plex-mono-latin-600-normal.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "IBM Plex Mono Local";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("/assets/fonts/ibm-plex-mono-latin-700-normal.woff2") format("woff2");
+}
+
 :root {
   --header-height: 64px;
+  --header-accent: var(--stage-surge);
+}
+
+:root[data-formula="resurge"] {
+  --header-accent: var(--stage-resurge);
 }
 
 .site-header {
@@ -31,18 +68,13 @@
   line-height: 1;
   text-decoration: none;
   touch-action: manipulation;
-}
-
-.wordmark span {
-  align-self: flex-start;
-  margin: 8px 0 0 4px;
-  font-family: var(--mono);
-  font-size: 7px;
-  letter-spacing: 0;
+  background: transparent;
+  color: var(--carbon);
+  transition: background-color 180ms ease-out;
 }
 
 .wordmark:hover {
-  background: var(--stage-surge);
+  background: var(--header-accent);
   color: var(--carbon);
 }
 
@@ -95,17 +127,17 @@
 }
 
 .site-header nav a[aria-current="page"]::after {
-  background: var(--stage-surge);
+  background: var(--header-accent);
 }
 
 .site-header nav a:hover::after,
 .site-header nav a:focus-visible::after,
 .site-header nav a:active::after {
-  background: var(--carbon);
+  background: var(--header-accent);
 }
 
 .site-footer {
-  min-height: 128px;
+  min-height: 64px;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -149,7 +181,7 @@
   }
 
   .site-footer {
-    min-height: 96px;
+    min-height: 72px;
     flex-direction: row;
     align-items: center;
     justify-content: space-between;

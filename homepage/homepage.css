@@ -7,7 +7,7 @@
   --carbon: #111318;
   --pulse: #ff6a2b;
   --white: #ffffff;
-  --mono: "IBM Plex Mono", "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+  --mono: "IBM Plex Mono Local", "SFMono-Regular", Consolas, "Liberation Mono", monospace;
   --display: "Helvetica Neue", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   --gap: 6px;
   --rule: 1px solid var(--carbon);
@@ -173,6 +173,10 @@ img {
 
 .mosaic-photo:nth-of-type(5n) img {
   object-position: 58% 20%;
+}
+
+.mosaic-photo.mosaic-photo--product-detail img {
+  object-position: 54% 100%;
 }
 
 .mosaic-headline {
