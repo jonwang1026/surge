@@ -1,7 +1,7 @@
 :root {
-  --stage-surge: #9ddcf0;
+  --stage-surge: rgb(157, 220, 240);
   --mark-surge: #111318;
-  --stage-resurge: #9be3d3;
+  --stage-resurge: rgb(155, 227, 211);
   --foil: #d7dae0;
   --milk: #f4f6f2;
   --carbon: #111318;
@@ -9,6 +9,8 @@
   --white: #ffffff;
   --error: #ff2e1f;
   --error-text: #b42318;
+  --pending-button-bg: #111318;
+  --pending-button-text: #ffffff;
   --display: "Helvetica Neue", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   --mono: "IBM Plex Mono Local", "SFMono-Regular", Consolas, "Liberation Mono", monospace;
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
@@ -20,6 +22,10 @@
 *::before,
 *::after {
   box-sizing: border-box;
+}
+
+[hidden] {
+  display: none !important;
 }
 
 html {
@@ -409,6 +415,11 @@ a {
 }
 
 .input-row button {
+  display: inline-flex;
+  min-width: 117px;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
   padding: 0 18px;
   border-top: var(--rule);
   background: var(--carbon);
@@ -417,6 +428,22 @@ a {
   font-weight: 700;
   letter-spacing: 0.08em;
   text-transform: uppercase;
+}
+
+.submit-spinner {
+  width: 12px;
+  height: 12px;
+  flex: 0 0 12px;
+  border: 2px solid currentcolor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: submit-spin 700ms linear infinite;
+}
+
+@keyframes submit-spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .input-row button:hover:not(:disabled) {
@@ -432,6 +459,12 @@ a {
 .input-row button:disabled {
   cursor: default;
   opacity: 0.55;
+}
+
+.signup[aria-busy="true"] .input-row button:disabled {
+  background: var(--pending-button-bg);
+  color: var(--pending-button-text);
+  opacity: 1;
 }
 
 .signup-consent {
@@ -502,33 +535,6 @@ a {
   margin: 10px 0 0;
   font-size: 16px;
   line-height: 1.5;
-}
-
-.signup-reset {
-  max-width: 100%;
-  min-height: 44px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  margin-top: 16px;
-  margin-left: 0;
-  padding: 0 12px 0 0;
-  border: 0;
-  background: transparent;
-  color: var(--carbon);
-  font-family: var(--mono);
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  line-height: 1.3;
-  text-align: center;
-  text-transform: uppercase;
-  white-space: normal;
-  transition: background-color 180ms ease-out;
-}
-
-.signup-reset:active {
-  background: var(--formula-accent);
 }
 
 .confirmation-page {
@@ -754,12 +760,6 @@ a {
   }
 }
 
-@media (hover: hover) and (pointer: fine) {
-  .signup-reset:hover {
-    background: var(--formula-accent);
-  }
-}
-
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
@@ -776,5 +776,9 @@ a {
 
   .product-case {
     transform: rotate(8deg);
+  }
+
+  .submit-spinner {
+    animation: none;
   }
 }

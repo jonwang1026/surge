@@ -1,149 +1,124 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <meta
-      name="description"
-      content="SURGE caffeinated gum and mints. Join the early-access list."
-    />
-    <meta name="theme-color" content="#9ddcf0" />
-    <meta name="robots" content="noindex, nofollow, noarchive" />
-    <title>SURGE Early Access — Be the first to carry it</title>
-    <link rel="stylesheet" href="/styles.css?v=21" />
-    <link rel="stylesheet" href="/shared.css?v=11" />
-    <script src="/app.js?v=12" defer></script>
-    <script defer src="/_vercel/insights/script.js"></script>
-  </head>
-  <body>
-    <a class="skip-link" href="#main">Skip to content</a>
 
-    <header class="site-header">
-      <a class="wordmark" href="/homepage/" aria-label="SURGE homepage" translate="no">
-        SURGE
-      </a>
-      <nav aria-label="Primary">
-        <a href="/homepage/">Home</a>
-        <a aria-current="page" href="/earlyaccess/">Early access</a>
-      </nav>
-    </header>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="description" content="SURGE caffeinated gum and mints. Join the early-access list." />
+  <meta name="theme-color" content="rgb(157, 220, 240)" />
+  <meta name="robots" content="noindex, nofollow, noarchive" />
+  <title>SURGE Early Access — Be the first to carry it</title>
+  <link rel="stylesheet" href="/styles.css?v=21" />
+  <link rel="stylesheet" href="/shared.css?v=11" />
+  <script src="/app.js?v=12" defer></script>
+  <script defer src="/_vercel/insights/script.js"></script>
+</head>
 
-    <main id="main">
-      <section class="dossier" data-formula="surge" aria-labelledby="hero-title">
-        <div class="dossier-copy">
-          <h1 id="hero-title">Be the first to carry it.</h1>
-          <p class="dossier-lede">
-            <span>Fresh breath.</span>
-            <span>Fresh energy.</span>
-            <span class="dossier-lede-detail">In a case made to be seen.</span>
-          </p>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
 
-          <div class="formula-toggle" role="group" aria-label="Choose a formula">
-            <button
-              class="formula-button is-active"
-              type="button"
-              data-formula="surge"
-              aria-pressed="true"
-            >
-              <span translate="no">SURGE</span>
-              <small>Caffeinated</small>
-            </button>
-            <button
-              class="formula-button"
-              type="button"
-              data-formula="resurge"
-              aria-pressed="false"
-            >
-              <span translate="no">RESURGE</span>
-              <small>Caffeine-free</small>
-            </button>
+  <header class="site-header">
+    <a class="wordmark" href="/homepage/" aria-label="SURGE homepage" translate="no">
+      SURGE
+    </a>
+    <nav aria-label="Primary">
+      <a href="/homepage/">Home</a>
+      <a aria-current="page" href="/earlyaccess/">Early access</a>
+    </nav>
+  </header>
+
+  <main id="main">
+    <section class="dossier" data-formula="surge" aria-labelledby="hero-title">
+      <div class="dossier-copy">
+        <h1 id="hero-title">Be the first to carry it.</h1>
+        <p class="dossier-lede">
+          <span>Fresh breath.</span>
+          <span>Fresh energy.</span>
+          <span class="dossier-lede-detail">In a case made to be seen.</span>
+        </p>
+
+        <div class="formula-toggle" role="group" aria-label="Choose a formula">
+          <button class="formula-button is-active" type="button" data-formula="surge" aria-pressed="true">
+            <span translate="no">SURGE</span>
+            <small>Caffeinated</small>
+          </button>
+          <button class="formula-button" type="button" data-formula="resurge" aria-pressed="false">
+            <span translate="no">RESURGE</span>
+            <small>Caffeine-free</small>
+          </button>
+        </div>
+      </div>
+
+      <figure class="dossier-object" data-formula-stage="surge">
+        <div class="measured-object">
+          <div class="product-case product-case--dossier" data-tilt aria-hidden="true">
+            <span class="case-mark" translate="no">SURGE</span>
+            <span class="case-detail">POCKET GUM / S—01</span>
+            <span class="case-notch"></span>
           </div>
         </div>
+        <figcaption class="visually-hidden" data-product-caption>
+          A brushed aluminum SURGE pocket case on a SURGE Blue product stage.
+        </figcaption>
+      </figure>
 
-        <figure class="dossier-object" data-formula-stage="surge">
-          <div class="measured-object">
-            <div class="product-case product-case--dossier" data-tilt aria-hidden="true">
-              <span class="case-mark" translate="no">SURGE</span>
-              <span class="case-detail">POCKET GUM / S—01</span>
-              <span class="case-notch"></span>
+      <section class="signup-panel" id="early-access" aria-labelledby="early-access-title">
+        <div class="signup-intro">
+          <h2 class="signup-title" id="early-access-title">Get early access</h2>
+        </div>
+
+        <form class="signup" novalidate aria-busy="false">
+          <div data-signup-fields>
+            <label for="email">Email address</label>
+            <div class="input-row">
+              <input id="email" name="email" type="email" autocomplete="email" inputmode="email"
+                placeholder="no@stinkybreath.com" pattern="[^\s@]+@[^\s@]+\.[^\s@]{2,}"
+                aria-describedby="signup-consent form-message" spellcheck="false" required />
+              <button type="submit">
+                <span data-submit-label>Join</span>
+                <span class="submit-spinner" aria-hidden="true" hidden></span>
+              </button>
             </div>
-          </div>
-          <figcaption class="visually-hidden" data-product-caption>
-            A brushed aluminum SURGE pocket case on a SURGE Blue product stage.
-          </figcaption>
-        </figure>
-
-        <section class="signup-panel" id="early-access" aria-labelledby="early-access-title">
-          <div class="signup-intro">
-            <h2 class="signup-title" id="early-access-title">Get early access</h2>
-          </div>
-
-          <form class="signup" novalidate aria-busy="false">
-            <div data-signup-fields>
-              <label for="email">
-                Email address<span class="visually-hidden"> required</span>
-              </label>
-              <div class="input-row">
-                <input
-                  id="email"
-                  name="email"
-                  type="email"
-                  autocomplete="email"
-                  inputmode="email"
-                  placeholder="you@example.com…"
-                  pattern="[^\s@]+@[^\s@]+\.[^\s@]{2,}"
-                  aria-describedby="signup-consent form-message"
-                  spellcheck="false"
-                  required
-                />
-                <button type="submit">Join</button>
-              </div>
-              <p class="signup-consent" id="signup-consent">
-                Submitting requests a confirmation email. By confirming, you agree to receive
-                SURGE early-access and product-launch emails.
-              </p>
-              <div class="signup-trap" inert>
-                <label for="company">Company</label>
-                <input id="company" name="company" type="text" tabindex="-1" autocomplete="off" />
-              </div>
-              <input name="renderedAt" type="hidden" value="" />
-              <p class="form-message" id="form-message" aria-live="polite"></p>
+            <p class="signup-consent" id="signup-consent">
+              By joining, you confirm you want to receive SURGE early-access and product-launch
+              emails.
+            </p>
+            <div class="signup-trap" inert>
+              <label for="company">Company</label>
+              <input id="company" name="company" type="text" tabindex="-1" autocomplete="off" />
             </div>
+            <input name="renderedAt" type="hidden" value="" />
+            <p class="form-message" id="form-message" aria-live="polite"></p>
+          </div>
 
-            <div
-              class="signup-confirmation"
-              data-signup-confirmation
-              role="status"
-              aria-live="polite"
-              aria-labelledby="confirmation-title"
-              hidden
-            >
-              <h3 id="confirmation-title">Check your inbox.</h3>
-              <p>Confirm your email to join early access.</p>
-              <button class="signup-reset" type="button">Use a different email</button>
-            </div>
-          </form>
-        </section>
-
-        <dl class="dossier-specs" aria-label="Selected product details">
-          <div>
-            <dt>Formula</dt>
-            <dd data-formula-detail>Caffeinated</dd>
+          <div class="signup-confirmation" data-signup-confirmation role="status" aria-live="polite"
+            aria-labelledby="confirmation-title" hidden>
+            <h3 id="confirmation-title" tabindex="-1">Check your inbox.</h3>
+            <p>Confirm your email to join early access.</p>
           </div>
-          <div>
-            <dt>Taste</dt>
-            <dd>Seriously minty</dd>
-          </div>
-          <div>
-            <dt>Case</dt>
-            <dd>Sculpted aluminum</dd>
-          </div>
-        </dl>
+        </form>
       </section>
-    </main>
 
-    <footer class="site-footer" id="contact">
-      <p translate="no">SURGE | © 2026</p>
-    </footer>
-  </body>
+      <dl class="dossier-specs" aria-label="Selected product details">
+        <div>
+          <dt>Formula</dt>
+          <dd data-formula-detail>Caffeinated</dd>
+        </div>
+        <div>
+          <dt>Taste</dt>
+          <dd>Seriously minty</dd>
+        </div>
+        <div>
+          <dt>Case</dt>
+          <dd>Aluminum</dd>
+        </div>
+      </dl>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <p translate="no">SURGE | © 2026</p>
+  </footer>
+</body>
+
 </html>

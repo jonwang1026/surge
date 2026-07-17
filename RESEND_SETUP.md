@@ -38,7 +38,7 @@ Subscribe to `email.bounced`, `email.complained`, `email.suppressed`, `email.del
 
 ## Owner-only smoke test
 
-1. Run `npm run check` in `surge-prototype/`.
+1. Run `npm run check` in `surge/`.
 2. Confirm `/`, `/homepage/`, and `/earlyaccess/` resolve and remain non-indexed.
 3. Submit only `TEST_RECIPIENT_EMAIL` and verify one confirmation email arrives.
 4. Follow the link and confirm the browser lands on `/earlyaccess/confirmed/` without a token in the visible URL.

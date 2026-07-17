@@ -1,7 +1,7 @@
 :root {
-  --stage-surge: #9ddcf0;
-  --stage-resurge: #9be3d3;
-  --mark-surge: #3155ff;
+  --stage-surge: rgb(157, 220, 240);
+  --stage-resurge: rgb(155, 227, 211);
+  --mark-surge: rgb(157, 220, 240);
   --foil: #d7dae0;
   --milk: #f4f6f2;
   --carbon: #111318;
@@ -209,16 +209,55 @@ img {
 }
 
 .hero-description {
-  max-width: 38ch;
-  margin: auto 0 0;
+  max-width: 100%;
+  margin: 0;
   padding-top: clamp(16px, 5cqi, 32px);
   font-family: var(--display);
-  font-size: clamp(14px, 4.4vw, 20px);
-  font-size: clamp(14px, 5cqi, 20px);
+  font-size: clamp(11px, 3.6cqi, 20px);
   font-weight: 500;
   line-height: 1.35;
   letter-spacing: -0.02em;
   text-wrap: pretty;
+}
+
+.hero-description-primary {
+  display: inline-block;
+  max-width: 100%;
+  white-space: nowrap;
+}
+
+@container (max-width: 280px) {
+  .hero-description-primary {
+    white-space: normal;
+  }
+}
+
+.hero-support {
+  display: grid;
+  justify-items: start;
+  gap: 12px;
+  margin-top: auto;
+}
+
+.hero-cta {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  padding: 0 14px;
+  border: var(--rule);
+  background: var(--carbon);
+  color: var(--white);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.hero-cta:hover,
+.hero-cta:active {
+  background: var(--stage-surge);
+  color: var(--carbon);
 }
 
 @media (min-width: 768px) {
