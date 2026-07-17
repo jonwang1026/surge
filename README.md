@@ -13,7 +13,7 @@ The homepage and early-access page share the sticky navigation and footer. There
 
 ## Local preview
 
-From the repository root:
+From this directory:
 
 ```sh
 npm run prototype
@@ -23,7 +23,7 @@ This runs `scripts/prototype-server.js` on <http://localhost:4173>. The local se
 
 ## App checks
 
-From `surge-prototype/`:
+From this directory:
 
 ```sh
 npm ci
@@ -31,6 +31,10 @@ npm run check
 ```
 
 `check` runs HTML, CSS, JavaScript, type, unit, and browser tests. Browser coverage targets 320, 375, 768, 1024, and 1440 CSS pixels.
+
+## Project skills and context
+
+The repository keeps its working instructions, current skill inventory, and installed project skills in `AGENTS.md`, `SKILLS.md`, `.agents/skills/`, and `skills-lock.json`. Product language and visual tokens are recorded in [CONTEXT.md](./CONTEXT.md); interface decisions are in [DESIGN.md](./DESIGN.md).
 
 ## Signup boundary
 

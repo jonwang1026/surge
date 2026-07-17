@@ -1,8 +1,19 @@
-# SURGE product and signup context
+# SURGE product and website context
 
 ## Product
 
 SURGE is the caffeinated gum-and-mint formula. RESURGE is the caffeine-free formula. Both use the same reusable aluminum pocket-case system and share the idea of intense mint freshness.
+
+The aluminum pocket case is the signature object. Color identifies the selected formula; it does not replace the formula label or text.
+
+## Visual language
+
+- SURGE Blue: `rgb(157, 220, 240)`
+- RESURGE Teal: `rgb(155, 227, 211)`
+- Foil: `#D7DAE0`
+- Milk: `#F4F6F2`
+- Carbon: `#111318`
+- Pulse Orange: `#FF6A2B`
 
 ## Website states
 
