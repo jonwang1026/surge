@@ -100,7 +100,7 @@ export function resolveResendWebhookSecret(env) {
   return requireSecret(
     env.RESEND_WEBHOOK_SECRET,
     "RESEND_WEBHOOK_SECRET",
-    /^whsec_[A-Za-z0-9_-]{16,}$/u,
+    /^whsec_[A-Za-z0-9+/]{16,}={0,2}$/u,
   );
 }
 

@@ -31,8 +31,11 @@ Provide the test Segment and Topic IDs, sender, Template ID, webhook secret, tok
 After the stable origin exists, point one Resend webhook at:
 
 ```text
-https://<stable-origin>/api/resend-webhook
+https://<stable-origin>/api/resend-webhook/
 ```
+
+Use the canonical trailing-slash URL so Resend posts directly to the function instead of receiving
+the site-wide trailing-slash redirect.
 
 Subscribe to `email.bounced`, `email.complained`, `email.suppressed`, `email.delivery_delayed`, `email.failed`, and `email.delivered`. Store the signing secret as `RESEND_WEBHOOK_SECRET`.
 

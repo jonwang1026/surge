@@ -1,14 +1,14 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 
-import { resolveSignupConfig } from "../api/_lib/config.js";
+import { resolveResendWebhookSecret, resolveSignupConfig } from "../api/_lib/config.js";
 
 const env = {
   SIGNUP_MODE: "preview",
   PUBLIC_SITE_URL: "https://example.com",
   BRAND_NAME: "SURGE",
   RESEND_API_KEY: ["re", "test_api_key_not_real_123456"].join("_"),
-  RESEND_WEBHOOK_SECRET: ["whsec", "test_webhook_not_real_123456"].join("_"),
+  RESEND_WEBHOOK_SECRET: ["whsec", "+/".repeat(16)].join("_"),
   RESEND_FROM_EMAIL: "SURGE <onboarding@resend.dev>",
   RESEND_CONFIRM_TEMPLATE_ID: "tmpl_test",
   RESEND_EARLY_ACCESS_SEGMENT_ID: "seg_production",
@@ -44,5 +44,12 @@ test("active configuration rejects malformed secrets and non-origin site URLs", 
   );
   assert.throws(() =>
     resolveSignupConfig({ ...env, SIGNUP_IDEMPOTENCY_SECRET: "too-short" }),
+  );
+});
+
+test("webhook configuration accepts Resend's standard Base64 signing secret", () => {
+  assert.equal(resolveResendWebhookSecret(env), env.RESEND_WEBHOOK_SECRET);
+  assert.throws(() =>
+    resolveResendWebhookSecret({ ...env, RESEND_WEBHOOK_SECRET: "whsec_not_base64url" }),
   );
 });
