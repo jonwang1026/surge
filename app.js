@@ -4,14 +4,14 @@ const FORMULAS = {
     detail: "Caffeinated",
     caseDetail: "POCKET GUM / S—01",
     caption: "A brushed aluminum SURGE pocket case on a SURGE Blue product stage.",
-    themeColor: "#9ddcf0",
+    themeColor: "rgb(157, 220, 240)",
   },
   resurge: {
     name: "RESURGE",
     detail: "Caffeine-free",
     caseDetail: "CAFFEINE-FREE / R—01",
     caption: "A brushed aluminum RESURGE pocket case on a RESURGE Teal product stage.",
-    themeColor: "#9be3d3",
+    themeColor: "rgb(155, 227, 211)",
   },
 };
 
@@ -60,13 +60,25 @@ const form = document.querySelector(".signup");
 if (form) {
   const input = form.querySelector('input[type="email"]');
   const submitButton = form.querySelector('button[type="submit"]');
+  const submitLabel = submitButton.querySelector("[data-submit-label]");
+  const submitSpinner = submitButton.querySelector(".submit-spinner");
   const message = form.querySelector(".form-message");
   const fields = form.querySelector("[data-signup-fields]");
   const confirmation = form.querySelector("[data-signup-confirmation]");
-  const resetButton = confirmation.querySelector(".signup-reset");
+  const confirmationTitle = confirmation.querySelector("#confirmation-title");
   const renderedAt = form.querySelector('input[name="renderedAt"]');
   const company = form.querySelector('input[name="company"]');
   const completeEmailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+
+  const showFields = () => {
+    fields.hidden = false;
+    confirmation.hidden = true;
+  };
+
+  const showConfirmation = () => {
+    fields.hidden = true;
+    confirmation.hidden = false;
+  };
 
   const hasCompleteEmail = () =>
     input.validity.valid && completeEmailPattern.test(input.value.trim());
@@ -96,7 +108,8 @@ if (form) {
     form.setAttribute("aria-busy", String(pending));
     input.disabled = pending;
     submitButton.disabled = pending;
-    submitButton.textContent = pending ? "Joining…" : "Join";
+    submitLabel.textContent = pending ? "Joining…" : "Join";
+    submitSpinner.hidden = !pending;
   };
 
   input.addEventListener("blur", () => {
@@ -120,6 +133,7 @@ if (form) {
   form.addEventListener("submit", async (event) => {
     event.preventDefault();
     clearMessage();
+    showFields();
 
     if (!hasCompleteEmail()) {
       showError();
@@ -141,35 +155,30 @@ if (form) {
       });
 
       if (response.status === 202) {
-        fields.hidden = true;
-        confirmation.hidden = false;
+        showConfirmation();
+        confirmationTitle.focus({ preventScroll: true });
         return;
       }
       if (response.status === 400) {
+        showFields();
         showError();
+        setPending(false);
         input.focus();
         return;
       }
       if (response.status === 429) {
+        showFields();
         showTemporaryError("Too many attempts. Please wait and try again.");
         return;
       }
+      showFields();
       showTemporaryError();
     } catch {
+      showFields();
       showTemporaryError();
     } finally {
       setPending(false);
     }
-  });
-
-  resetButton.addEventListener("click", () => {
-    confirmation.hidden = true;
-    fields.hidden = false;
-    form.reset();
-    renderedAt.value = String(Date.now());
-    clearMessage();
-    input.removeAttribute("aria-invalid");
-    input.focus();
   });
 
   renderedAt.value = String(Date.now());

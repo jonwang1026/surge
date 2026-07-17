@@ -32,11 +32,12 @@
 
 :root {
   --header-height: 64px;
-  --header-accent: var(--stage-surge);
+  --header-accent: rgb(157, 220, 240);
+  --header-accent-foreground: var(--carbon);
 }
 
 :root[data-formula="resurge"] {
-  --header-accent: var(--stage-resurge);
+  --header-accent: rgb(155, 227, 211);
 }
 
 .site-header {
@@ -75,11 +76,12 @@
 
 .wordmark:hover {
   background: var(--header-accent);
-  color: var(--carbon);
+  color: var(--header-accent-foreground);
 }
 
 .site-header nav a:hover {
-  background: transparent;
+  background: var(--header-accent);
+  color: var(--header-accent-foreground);
 }
 
 .wordmark:active {
@@ -122,7 +124,7 @@
   right: 8px;
   bottom: 4px;
   left: 8px;
-  height: 2px;
+  height: 3px;
   background: transparent;
 }
 
