@@ -15,49 +15,53 @@ const FORMULAS = {
   },
 };
 
-const stage = document.querySelector(".dossier-object");
-const dossier = document.querySelector(".dossier");
-const themeColor = document.querySelector('meta[name="theme-color"]');
+function initializeFormulaSelection() {
+  const stage = document.querySelector(".dossier-object");
+  const dossier = document.querySelector(".dossier");
+  const themeColor = document.querySelector('meta[name="theme-color"]');
+  if (!stage || !dossier) return;
 
-const setFormula = (formulaKey, updateUrl = true) => {
-  const formula = FORMULAS[formulaKey];
-  if (!formula || !stage) return;
+  const setFormula = (formulaKey, updateUrl = true) => {
+    const formula = FORMULAS[formulaKey];
+    if (!formula) return;
 
-  document.querySelectorAll(".formula-button").forEach((candidate) => {
-    const isActive = candidate.dataset.formula === formulaKey;
-    candidate.classList.toggle("is-active", isActive);
-    candidate.setAttribute("aria-pressed", String(isActive));
+    document.querySelectorAll(".formula-button").forEach((candidate) => {
+      const isActive = candidate.dataset.formula === formulaKey;
+      candidate.classList.toggle("is-active", isActive);
+      candidate.setAttribute("aria-pressed", String(isActive));
+    });
+
+    document.documentElement.dataset.formula = formulaKey;
+    dossier.dataset.formula = formulaKey;
+    stage.dataset.formulaStage = formulaKey;
+    document.querySelector(".product-case--dossier .case-mark").textContent = formula.name;
+    document.querySelector(".product-case--dossier .case-detail").textContent = formula.caseDetail;
+    document.querySelector("[data-formula-detail]").textContent = formula.detail;
+    document.querySelector("[data-product-caption]").textContent = formula.caption;
+    themeColor?.setAttribute("content", formula.themeColor);
+
+    if (updateUrl) {
+      const url = new URL(window.location.href);
+      if (formulaKey === "surge") url.searchParams.delete("formula");
+      else url.searchParams.set("formula", formulaKey);
+      window.history.replaceState({}, "", url);
+    }
+  };
+
+  document.querySelectorAll(".formula-button").forEach((button) => {
+    button.addEventListener("click", () => {
+      setFormula(button.dataset.formula);
+    });
   });
 
-  document.documentElement.dataset.formula = formulaKey;
-  dossier.dataset.formula = formulaKey;
-  stage.dataset.formulaStage = formulaKey;
-  document.querySelector(".product-case--dossier .case-mark").textContent = formula.name;
-  document.querySelector(".product-case--dossier .case-detail").textContent = formula.caseDetail;
-  document.querySelector("[data-formula-detail]").textContent = formula.detail;
-  document.querySelector("[data-product-caption]").textContent = formula.caption;
-  themeColor?.setAttribute("content", formula.themeColor);
+  const initialFormula = new URLSearchParams(window.location.search).get("formula");
+  if (initialFormula && FORMULAS[initialFormula]) setFormula(initialFormula, false);
+}
 
-  if (updateUrl) {
-    const url = new URL(window.location.href);
-    if (formulaKey === "surge") url.searchParams.delete("formula");
-    else url.searchParams.set("formula", formulaKey);
-    window.history.replaceState({}, "", url);
-  }
-};
+function initializeSignupForm() {
+  const form = document.querySelector(".signup");
+  if (!form) return;
 
-document.querySelectorAll(".formula-button").forEach((button) => {
-  button.addEventListener("click", () => {
-    setFormula(button.dataset.formula);
-  });
-});
-
-const initialFormula = new URLSearchParams(window.location.search).get("formula");
-if (initialFormula && FORMULAS[initialFormula]) setFormula(initialFormula, false);
-
-const form = document.querySelector(".signup");
-
-if (form) {
   const input = form.querySelector('input[type="email"]');
   const submitButton = form.querySelector('button[type="submit"]');
   const submitLabel = submitButton.querySelector("[data-submit-label]");
@@ -184,10 +188,11 @@ if (form) {
   renderedAt.value = String(Date.now());
 }
 
-const supportsPointerTilt = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
-const reducesMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+function initializePointerTilt() {
+  const supportsPointerTilt = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+  const reducesMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (!supportsPointerTilt || reducesMotion) return;
 
-if (supportsPointerTilt && !reducesMotion) {
   document.querySelectorAll("[data-tilt]").forEach((element) => {
     let bounds;
 
@@ -210,3 +215,7 @@ if (supportsPointerTilt && !reducesMotion) {
     });
   });
 }
+
+initializeFormulaSelection();
+initializeSignupForm();
+initializePointerTilt();

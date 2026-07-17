@@ -2,10 +2,8 @@
   --stage-surge: rgb(157, 220, 240);
   --mark-surge: #111318;
   --stage-resurge: rgb(155, 227, 211);
-  --foil: #d7dae0;
   --milk: #f4f6f2;
   --carbon: #111318;
-  --pulse: #ff6a2b;
   --white: #ffffff;
   --error: #ff2e1f;
   --error-text: #b42318;
@@ -14,7 +12,6 @@
   --display: "Helvetica Neue", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   --mono: "IBM Plex Mono Local", "SFMono-Regular", Consolas, "Liberation Mono", monospace;
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
-  --gutter: max(18px, env(safe-area-inset-left));
   --rule: 1px solid var(--carbon);
 }
 
@@ -136,7 +133,6 @@ a {
   background: var(--white);
 }
 
-.eyebrow,
 .dossier-specs dt,
 .signup label {
   margin: 0;
@@ -504,11 +500,6 @@ a {
 
 .form-message.is-error {
   color: var(--error-text);
-  font-weight: 600;
-}
-
-.form-message.is-success {
-  color: var(--carbon);
   font-weight: 600;
 }
 
