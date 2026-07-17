@@ -1,17 +1,14 @@
 :root {
   --stage-surge: rgb(157, 220, 240);
-  --stage-resurge: rgb(155, 227, 211);
   --mark-surge: rgb(157, 220, 240);
   --foil: #d7dae0;
   --milk: #f4f6f2;
   --carbon: #111318;
-  --pulse: #ff6a2b;
   --white: #ffffff;
   --mono: "IBM Plex Mono Local", "SFMono-Regular", Consolas, "Liberation Mono", monospace;
   --display: "Helvetica Neue", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
   --gap: 6px;
   --rule: 1px solid var(--carbon);
-  --ease: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 *,
@@ -127,7 +124,7 @@ img {
   min-height: 0;
   margin: 0;
   overflow: hidden;
-  background: #d7dae0;
+  background: var(--foil);
 }
 
 .mosaic-tile--wide,

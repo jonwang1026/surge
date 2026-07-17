@@ -37,7 +37,7 @@ function gateway(overrides = {}) {
   return {
     calls,
     async getSubscription() {
-      return { exists: false, subscribed: false, inSegment: false, topicOptIn: false };
+      return { subscribed: false, inSegment: false, topicOptIn: false };
     },
     async sendConfirmation(payload) {
       calls.sent.push(payload);
@@ -92,7 +92,7 @@ test("sends one owner confirmation with an encrypted link and opaque idempotency
 test("does not send when the selected segment and topic are already confirmed", async () => {
   const provider = gateway({
     async getSubscription() {
-      return { exists: true, subscribed: true, inSegment: true, topicOptIn: true };
+      return { subscribed: true, inSegment: true, topicOptIn: true };
     },
   });
   const response = await handleSignupRequest(signupRequest({ email: "Owner@example.com" }), {

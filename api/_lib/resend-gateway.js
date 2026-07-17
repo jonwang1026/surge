@@ -10,7 +10,7 @@ export class ResendGateway {
   async getSubscription(email, segmentId, topicId) {
     const contactResponse = await this.resend.contacts.get({ email });
     if (contactResponse.error?.statusCode === 404) {
-      return { exists: false, subscribed: false, inSegment: false, topicOptIn: false };
+      return { subscribed: false, inSegment: false, topicOptIn: false };
     }
     const contact = unwrap(contactResponse);
     const [segments, topics] = await Promise.all([
@@ -20,7 +20,6 @@ export class ResendGateway {
     const segmentData = unwrap(segments).data;
     const topicData = unwrap(topics).data;
     return {
-      exists: true,
       subscribed: !contact.unsubscribed,
       inSegment: segmentData.some((segment) => segment.id === segmentId),
       topicOptIn: topicData.some(

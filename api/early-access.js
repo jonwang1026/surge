@@ -14,7 +14,7 @@ import { isRecord } from "./_lib/validation.js";
 
 /**
  * @typedef {{getSubscription(email: string, segmentId: string, topicId: string): Promise<{
- * exists: boolean, subscribed: boolean, inSegment: boolean, topicOptIn: boolean}>,
+ * subscribed: boolean, inSegment: boolean, topicOptIn: boolean}>,
  * sendConfirmation(message: Record<string, string>): Promise<void>}} SignupGateway
  */
 
@@ -60,12 +60,7 @@ export async function handleSignupRequest(request, dependencies) {
   try {
     const gateway = dependencies.gateway || new ResendGateway(config.apiKey);
     const subscription = await gateway.getSubscription(email, config.segmentId, config.topicId);
-    if (
-      subscription.exists &&
-      subscription.subscribed &&
-      subscription.inSegment &&
-      subscription.topicOptIn
-    ) {
+    if (subscription.subscribed && subscription.inSegment && subscription.topicOptIn) {
       return neutralSignupResponse();
     }
 

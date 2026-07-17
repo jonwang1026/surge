@@ -13,7 +13,6 @@ The aluminum pocket case is the signature object. Color identifies the selected 
 - Foil: `#D7DAE0`
 - Milk: `#F4F6F2`
 - Carbon: `#111318`
-- Pulse Orange: `#FF6A2B`
 
 ## Website states
 

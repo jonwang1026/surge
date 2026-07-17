@@ -18,7 +18,6 @@ This document describes the interface that is implemented in `homepage/`, `early
 | Foil | `#D7DAE0` |
 | Milk | `#F4F6F2` |
 | Carbon | `#111318` |
-| Pulse | `#FF6A2B` |
 | White | `#FFFFFF` |
 | Error text | `#B42318` |
 | Display face | `Helvetica Neue`, `Segoe UI`, Roboto, Helvetica, Arial, sans-serif |
