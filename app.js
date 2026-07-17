@@ -70,7 +70,6 @@ function initializeSignupForm() {
   const panel = form.closest(".signup-panel");
   const fields = form.querySelector("[data-signup-fields]");
   const confirmation = form.querySelector("[data-signup-confirmation]");
-  const confirmationTitle = confirmation.querySelector("#confirmation-title");
   const renderedAt = form.querySelector('input[name="renderedAt"]');
   const company = form.querySelector('input[name="company"]');
   const completeEmailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
@@ -163,7 +162,6 @@ function initializeSignupForm() {
 
       if (response.status === 202) {
         showConfirmation();
-        confirmationTitle.focus({ preventScroll: true });
         return;
       }
       if (response.status === 400) {
