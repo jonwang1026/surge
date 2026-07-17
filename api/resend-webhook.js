@@ -1,4 +1,8 @@
-import { resolveSignupConfig, runtimeEnvironment } from "./_lib/config.js";
+import {
+  resolveResendWebhookSecret,
+  resolveSignupConfig,
+  runtimeEnvironment,
+} from "./_lib/config.js";
 import { normalizeEmail } from "./_lib/email.js";
 import { jsonResponse } from "./_lib/http.js";
 import { ResendGateway } from "./_lib/resend-gateway.js";
@@ -19,8 +23,10 @@ export async function handleResendWebhook(request, dependencies) {
   if (request.method !== "POST") return jsonResponse({ error: "method_not_allowed" }, 405);
 
   let config;
+  let webhookSecret;
   try {
     config = resolveSignupConfig(dependencies.env);
+    webhookSecret = resolveResendWebhookSecret(dependencies.env);
   } catch {
     return jsonResponse({ error: "temporarily_unavailable" }, 503);
   }
@@ -47,7 +53,7 @@ export async function handleResendWebhook(request, dependencies) {
   const gateway = dependencies.gateway || new ResendGateway(config.apiKey);
   let event;
   try {
-    event = gateway.verifyWebhook(payload, headers, config.webhookSecret);
+    event = gateway.verifyWebhook(payload, headers, webhookSecret);
   } catch {
     return jsonResponse({ error: "invalid_signature" }, 401);
   }

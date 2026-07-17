@@ -7,7 +7,7 @@ import { normalizeEmail } from "./email.js";
 /** @typedef {{mode: ActiveSignupMode, enabled: true, apiKey: string, from: string, templateId: string,
  * segmentId: string, topicId: string, ownerEmail: string | null, publicSiteUrl: string,
  * brandName: string, privacyUrl: string, postalAddress: string, tokenKeys: [string, ...string[]],
- * idempotencySecret: string, webhookSecret: string,
+ * idempotencySecret: string,
  * signupSource: "shareable_preview" | "production_canary" | "website"}} ActiveSignupConfig */
 
 /**
@@ -51,7 +51,6 @@ export function resolveSignupConfig(env) {
   }
 
   const apiKey = requireSecret(env.RESEND_API_KEY, "RESEND_API_KEY", /^re_[A-Za-z0-9_-]{16,}$/u);
-  const webhookSecret = requireSecret(env.RESEND_WEBHOOK_SECRET, "RESEND_WEBHOOK_SECRET", /^whsec_[A-Za-z0-9_-]{16,}$/u);
   const currentTokenKey = requireTokenKey(env.SIGNUP_TOKEN_KEY_CURRENT, "SIGNUP_TOKEN_KEY_CURRENT");
   const idempotencySecret = requireSecret(env.SIGNUP_IDEMPOTENCY_SECRET, "SIGNUP_IDEMPOTENCY_SECRET", /^\S{32,}$/u);
   /** @type {[string, ...string[]]} */
@@ -82,7 +81,6 @@ export function resolveSignupConfig(env) {
     postalAddress,
     tokenKeys,
     idempotencySecret,
-    webhookSecret,
     signupSource:
       mode === "preview"
         ? "shareable_preview"
@@ -90,6 +88,20 @@ export function resolveSignupConfig(env) {
           ? "production_canary"
           : "website",
   };
+}
+
+/**
+ * Webhook verification is independent from sending a confirmation email.
+ * Resolve its secret only when the webhook endpoint receives an event so a
+ * missing or rotated webhook configuration cannot block signup testing.
+ * @param {Environment} env
+ */
+export function resolveResendWebhookSecret(env) {
+  return requireSecret(
+    env.RESEND_WEBHOOK_SECRET,
+    "RESEND_WEBHOOK_SECRET",
+    /^whsec_[A-Za-z0-9_-]{16,}$/u,
+  );
 }
 
 /** @param {string | undefined} value */

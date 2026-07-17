@@ -70,7 +70,7 @@ PRIVACY_URL=
 BUSINESS_POSTAL_ADDRESS=
 ```
 
-Active modes require the Resend key, webhook secret, sender, template, matching Segment and Topic IDs, a 32-byte base64url token key, and an idempotency secret. `preview` and `canary` also require the normalized test address. `canary` and `live` require HTTPS privacy and postal-address values.
+Active signup modes require the Resend key, sender, template, matching Segment and Topic IDs, a 32-byte base64url token key, and an idempotency secret. `RESEND_WEBHOOK_SECRET` is required only by `POST /api/resend-webhook`; it does not block sending or confirming signups. `preview` and `canary` also require the normalized test address. `canary` and `live` require HTTPS privacy and postal-address values.
 
 Store all real values in server-side environment variables. Never commit them or expose them to branch previews.
 
