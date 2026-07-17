@@ -37,7 +37,7 @@ On fine pointers, photos rest in grayscale and return to source color on hover. 
 
 ### Early-access dossier
 
-`/earlyaccess/` combines the product statement, SURGE/RESURGE formula toggle, aluminum case stage, email form, and product details. The selected formula changes the stage color, case label, product detail, theme color, and accessible caption. The form has visible labels, validation, pending, temporary-error, and check-your-inbox states.
+`/earlyaccess/` combines the product statement, SURGE/RESURGE formula toggle, aluminum case stage, email form, and product details. The selected formula changes the stage color, case label, product detail, theme color, and accessible caption. The form has visible labels, validation, pending, temporary-error, and check-your-inbox states. After a successful request, the check-your-inbox state replaces the complete signup prompt and receives focus.
 
 The layout is single-column on phones and reorganizes into the dossier composition at wider widths. The formula controls remain text-based and are not color-only.
 

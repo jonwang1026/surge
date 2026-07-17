@@ -346,6 +346,10 @@ a {
   letter-spacing: -0.025em;
 }
 
+.signup-fields .signup-title {
+  margin-bottom: 16px;
+}
+
 .signup {
   width: 100%;
   max-width: 620px;
@@ -509,7 +513,7 @@ a {
   padding: 0;
 }
 
-.signup-confirmation h3 {
+.signup-confirmation h2 {
   max-width: 100%;
   margin: 0;
   overflow-wrap: anywhere;

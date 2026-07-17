@@ -19,24 +19,45 @@ for (const width of widths) {
   }
 }
 
-test("early-access submission has stable pending and terminal success states on mobile", async ({
+test("successful early-access submission replaces the form prompt across device sizes", async ({
   page,
 }) => {
-  await page.setViewportSize({ width: 320, height: 780 });
-  await page.goto("/earlyaccess/");
+  for (const viewport of [
+    { width: 320, height: 780 },
+    { width: 667, height: 375 },
+    { width: 768, height: 1024 },
+    { width: 1024, height: 768 },
+    { width: 1440, height: 900 },
+  ]) {
+    await page.setViewportSize(viewport);
+    await page.goto("/earlyaccess/");
 
-  await page.getByLabel("Email address (required)", { exact: true }).fill("owner@example.com");
-  await page.getByRole("button", { name: "Join", exact: true }).click();
-  await expect(page.getByRole("heading", { name: "Check your inbox." })).toBeVisible();
-  await expect(page.getByText("Confirm your email to join early access.")).toBeVisible();
-  await expect(page.locator("[data-signup-fields]")).toBeHidden();
-  await expect(page.locator("[data-signup-confirmation]")).toBeVisible();
-  await expect(page.locator("[data-signup-confirmation] button")).toHaveCount(0);
-  const dimensions = await page.evaluate(() => ({
-    viewport: document.documentElement.clientWidth,
-    content: document.documentElement.scrollWidth,
-  }));
-  expect(dimensions.content).toBeLessThanOrEqual(dimensions.viewport);
+    const signupPanel = page.locator("#early-access");
+    const initialTitle = page.getByRole("heading", { name: "Get early access", exact: true });
+    const confirmationTitle = page.getByRole("heading", {
+      name: "Check your inbox.",
+      exact: true,
+    });
+
+    await expect(initialTitle).toBeVisible();
+    await page.getByLabel("Email address", { exact: true }).fill("owner@example.com");
+    await page.getByRole("button", { name: "Join", exact: true }).click();
+
+    await expect(initialTitle).toBeHidden();
+    await expect(confirmationTitle).toBeVisible();
+    await expect(confirmationTitle).toBeFocused();
+    await expect(page.getByText("Confirm your email to join early access.")).toBeVisible();
+    await expect(page.locator("[data-signup-fields]")).toBeHidden();
+    await expect(page.locator("[data-signup-confirmation]")).toBeVisible();
+    await expect(page.locator("[data-signup-confirmation] button")).toHaveCount(0);
+    await expect(signupPanel).toHaveAttribute("aria-labelledby", "confirmation-title");
+
+    const dimensions = await page.evaluate(() => ({
+      viewport: document.documentElement.clientWidth,
+      content: document.documentElement.scrollWidth,
+    }));
+    expect(dimensions.content).toBeLessThanOrEqual(dimensions.viewport);
+  }
 });
 
 test("early-access 400 recovery restores the invalid email field before returning focus", async ({
@@ -48,7 +69,7 @@ test("early-access 400 recovery restores the invalid email field before returnin
   await page.goto("/earlyaccess/");
 
   const form = page.locator(".signup");
-  const input = page.getByLabel("Email address (required)", { exact: true });
+  const input = page.getByLabel("Email address", { exact: true });
   await input.fill("owner@example.com");
   await page.getByRole("button", { name: "Join", exact: true }).click();
 
@@ -81,7 +102,7 @@ test("early-access form exposes concise consent, pending feedback, and success f
     ).toBeVisible();
 
     const inputRow = page.locator(".input-row");
-    const input = page.getByLabel("Email address (required)", { exact: true });
+    const input = page.getByLabel("Email address", { exact: true });
     const submitButton = page.getByRole("button", { name: "Join", exact: true });
     await input.scrollIntoViewIfNeeded();
     if (viewport.width === 320) {
