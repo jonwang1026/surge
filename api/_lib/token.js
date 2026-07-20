@@ -2,8 +2,6 @@ const TOKEN_VERSION = "v1";
 const TOKEN_AUDIENCE = "surge-early-access";
 const CONSENT_VERSION = "early-access-v1";
 const TOKEN_TTL_MS = 24 * 60 * 60 * 1_000;
-const TOKEN_IV_BYTES = 12;
-const MIN_CIPHERTEXT_BYTES = 17;
 const encoder = new TextEncoder();
 const decoder = new TextDecoder();
 
@@ -49,8 +47,8 @@ async function keyIdentifier(encoded) {
  */
 export async function encryptSignupToken(signup, encodedKey, options = {}) {
   const now = options.now ?? Date.now();
-  const iv = options.randomBytes ?? crypto.getRandomValues(new Uint8Array(TOKEN_IV_BYTES));
-  if (iv.byteLength !== TOKEN_IV_BYTES) throw new Error("Invalid token IV");
+  const iv = options.randomBytes ?? crypto.getRandomValues(new Uint8Array(12));
+  if (iv.byteLength !== 12) throw new Error("Invalid token IV");
 
   const claims = {
     aud: TOKEN_AUDIENCE,
@@ -83,9 +81,7 @@ export async function decryptSignupToken(token, encodedKeys, options) {
 
   const iv = fromBase64Url(encodedIv);
   const ciphertext = fromBase64Url(encodedCiphertext);
-  if (iv.byteLength !== TOKEN_IV_BYTES || ciphertext.byteLength < MIN_CIPHERTEXT_BYTES) {
-    throw new Error("Invalid confirmation token");
-  }
+  if (iv.byteLength !== 12 || ciphertext.byteLength < 17) throw new Error("Invalid confirmation token");
 
   let plaintext = null;
   for (const encodedKey of encodedKeys.filter(Boolean)) {

@@ -22,16 +22,41 @@ export function resolveSignupConfig(env) {
   const mode = rawMode;
   if (mode === "disabled") return { mode, enabled: false };
 
-  const resources = resolveModeResources(mode, env);
-  const publicSiteUrl = resolvePublicSiteUrl(env.PUBLIC_SITE_URL);
+  const isTest = mode === "preview";
+  const isRestricted = isTest || mode === "canary";
+  const segmentId = requireValue(
+    isTest ? env.RESEND_TEST_SEGMENT_ID : env.RESEND_EARLY_ACCESS_SEGMENT_ID,
+    isTest ? "RESEND_TEST_SEGMENT_ID" : "RESEND_EARLY_ACCESS_SEGMENT_ID",
+  );
+  const topicId = requireValue(
+    isTest ? env.RESEND_TEST_TOPIC_ID : env.RESEND_EARLY_ACCESS_TOPIC_ID,
+    isTest ? "RESEND_TEST_TOPIC_ID" : "RESEND_EARLY_ACCESS_TOPIC_ID",
+  );
+  const ownerEmail = isRestricted ? normalizeEmail(env.TEST_RECIPIENT_EMAIL) : null;
+  if (isRestricted && !ownerEmail) throw new Error("Missing TEST_RECIPIENT_EMAIL");
+
+  let publicSiteUrl;
+  try {
+    publicSiteUrl = new URL(requireValue(env.PUBLIC_SITE_URL, "PUBLIC_SITE_URL"));
+  } catch {
+    throw new Error("Invalid PUBLIC_SITE_URL");
+  }
+  if (
+    (publicSiteUrl.protocol !== "https:" && publicSiteUrl.hostname !== "localhost") ||
+    publicSiteUrl.pathname !== "/" ||
+    publicSiteUrl.search ||
+    publicSiteUrl.hash
+  ) {
+    throw new Error("Invalid PUBLIC_SITE_URL");
+  }
 
   const apiKey = requireSecret(env.RESEND_API_KEY, "RESEND_API_KEY", /^re_[A-Za-z0-9_-]{16,}$/u);
-  const tokenKeys = resolveTokenKeys(env);
-  const idempotencySecret = requireSecret(
-    env.SIGNUP_IDEMPOTENCY_SECRET,
-    "SIGNUP_IDEMPOTENCY_SECRET",
-    /^\S{32,}$/u,
-  );
+  const currentTokenKey = requireTokenKey(env.SIGNUP_TOKEN_KEY_CURRENT, "SIGNUP_TOKEN_KEY_CURRENT");
+  const idempotencySecret = requireSecret(env.SIGNUP_IDEMPOTENCY_SECRET, "SIGNUP_IDEMPOTENCY_SECRET", /^\S{32,}$/u);
+  /** @type {[string, ...string[]]} */
+  const tokenKeys = env.SIGNUP_TOKEN_KEY_PREVIOUS
+    ? [currentTokenKey, requireTokenKey(env.SIGNUP_TOKEN_KEY_PREVIOUS, "SIGNUP_TOKEN_KEY_PREVIOUS")]
+    : [currentTokenKey];
   const privacyUrl = env.PRIVACY_URL || "";
   const postalAddress = env.BUSINESS_POSTAL_ADDRESS || "";
   if ((mode === "canary" || mode === "live") && (!privacyUrl || !postalAddress)) {
@@ -47,7 +72,9 @@ export function resolveSignupConfig(env) {
     apiKey,
     from: requireValue(env.RESEND_FROM_EMAIL, "RESEND_FROM_EMAIL"),
     templateId: requireValue(env.RESEND_CONFIRM_TEMPLATE_ID, "RESEND_CONFIRM_TEMPLATE_ID"),
-    ...resources,
+    segmentId,
+    topicId,
+    ownerEmail,
     publicSiteUrl: publicSiteUrl.origin,
     brandName: env.BRAND_NAME || "SURGE",
     privacyUrl,
@@ -61,54 +88,6 @@ export function resolveSignupConfig(env) {
           ? "production_canary"
           : "website",
   };
-}
-
-/**
- * @param {ActiveSignupMode} mode
- * @param {Environment} env
- * @returns {{segmentId: string, topicId: string, ownerEmail: string | null}}
- */
-function resolveModeResources(mode, env) {
-  const isTest = mode === "preview";
-  const isRestricted = isTest || mode === "canary";
-  const segmentId = requireValue(
-    isTest ? env.RESEND_TEST_SEGMENT_ID : env.RESEND_EARLY_ACCESS_SEGMENT_ID,
-    isTest ? "RESEND_TEST_SEGMENT_ID" : "RESEND_EARLY_ACCESS_SEGMENT_ID",
-  );
-  const topicId = requireValue(
-    isTest ? env.RESEND_TEST_TOPIC_ID : env.RESEND_EARLY_ACCESS_TOPIC_ID,
-    isTest ? "RESEND_TEST_TOPIC_ID" : "RESEND_EARLY_ACCESS_TOPIC_ID",
-  );
-  const ownerEmail = isRestricted ? normalizeEmail(env.TEST_RECIPIENT_EMAIL) : null;
-  if (isRestricted && !ownerEmail) throw new Error("Missing TEST_RECIPIENT_EMAIL");
-  return { segmentId, topicId, ownerEmail };
-}
-
-/** @param {string | undefined} value @returns {URL} */
-function resolvePublicSiteUrl(value) {
-  let publicSiteUrl;
-  try {
-    publicSiteUrl = new URL(requireValue(value, "PUBLIC_SITE_URL"));
-  } catch {
-    throw new Error("Invalid PUBLIC_SITE_URL");
-  }
-  if (
-    (publicSiteUrl.protocol !== "https:" && publicSiteUrl.hostname !== "localhost") ||
-    publicSiteUrl.pathname !== "/" ||
-    publicSiteUrl.search ||
-    publicSiteUrl.hash
-  ) {
-    throw new Error("Invalid PUBLIC_SITE_URL");
-  }
-  return publicSiteUrl;
-}
-
-/** @param {Environment} env @returns {[string, ...string[]]} */
-function resolveTokenKeys(env) {
-  const currentTokenKey = requireTokenKey(env.SIGNUP_TOKEN_KEY_CURRENT, "SIGNUP_TOKEN_KEY_CURRENT");
-  return env.SIGNUP_TOKEN_KEY_PREVIOUS
-    ? [currentTokenKey, requireTokenKey(env.SIGNUP_TOKEN_KEY_PREVIOUS, "SIGNUP_TOKEN_KEY_PREVIOUS")]
-    : [currentTokenKey];
 }
 
 /**

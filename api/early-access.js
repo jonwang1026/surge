@@ -12,10 +12,6 @@ import { ResendGateway } from "./_lib/resend-gateway.js";
 import { encryptSignupToken } from "./_lib/token.js";
 import { isRecord } from "./_lib/validation.js";
 
-const SIGNUP_BODY_MAX_BYTES = 2_048;
-const MINIMUM_FORM_AGE_MS = 700;
-const SIGNUP_IDEMPOTENCY_PREFIX = "early-access";
-
 /**
  * @typedef {{getSubscription(email: string, segmentId: string, topicId: string): Promise<{
  * subscribed: boolean, inSegment: boolean, topicOptIn: boolean}>,
@@ -33,7 +29,7 @@ export async function handleSignupRequest(request, dependencies) {
 
   let body;
   try {
-    body = await readJsonBody(request, SIGNUP_BODY_MAX_BYTES);
+    body = await readJsonBody(request, 2_048);
   } catch (error) {
     if (error instanceof BodyError && error.code === "too_large") {
       return jsonResponse({ error: "request_too_large" }, 413);
@@ -54,8 +50,7 @@ export async function handleSignupRequest(request, dependencies) {
 
   const now = dependencies.now ?? Date.now();
   const renderedAt = typeof payload.renderedAt === "number" ? payload.renderedAt : null;
-  const tooFast =
-    renderedAt !== null && now - renderedAt >= 0 && now - renderedAt < MINIMUM_FORM_AGE_MS;
+  const tooFast = renderedAt !== null && now - renderedAt >= 0 && now - renderedAt < 700;
   const browserFastPost = tooFast && request.headers.get("sec-fetch-site") === "same-origin";
   if (typeof payload.company === "string" && payload.company.trim()) return neutralSignupResponse();
   if (browserFastPost) return neutralSignupResponse();
@@ -84,7 +79,7 @@ export async function handleSignupRequest(request, dependencies) {
       privacyUrl: config.privacyUrl,
       postalAddress: config.postalAddress,
       mode: config.mode,
-      idempotencyKey: `${SIGNUP_IDEMPOTENCY_PREFIX}/${config.mode}/${digest}`,
+      idempotencyKey: `early-access/${config.mode}/${digest}`,
     });
     return neutralSignupResponse();
   } catch {

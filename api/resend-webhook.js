@@ -8,11 +8,6 @@ import { jsonResponse } from "./_lib/http.js";
 import { ResendGateway } from "./_lib/resend-gateway.js";
 import { isRecord } from "./_lib/validation.js";
 
-const WEBHOOK_BODY_MAX_BYTES = 262_144;
-const EMAIL_EVENT_PREFIX = "email.";
-const SUPPRESSION_EVENT_TYPES = new Set(["email.complained", "email.suppressed"]);
-const DELIVERY_LOG_EVENT_TYPES = new Set(["email.delivery_delayed", "email.failed"]);
-
 /**
  * @typedef {{verifyWebhook(payload: string, headers: {id: string, timestamp: string,
  * signature: string}, secret: string): unknown,
@@ -49,11 +44,9 @@ export async function handleResendWebhook(request, dependencies) {
   }
 
   const declaredLength = Number(request.headers.get("content-length") || 0);
-  if (declaredLength > WEBHOOK_BODY_MAX_BYTES) {
-    return jsonResponse({ error: "request_too_large" }, 413);
-  }
+  if (declaredLength > 262_144) return jsonResponse({ error: "request_too_large" }, 413);
   const payload = await request.text();
-  if (new TextEncoder().encode(payload).byteLength > WEBHOOK_BODY_MAX_BYTES) {
+  if (new TextEncoder().encode(payload).byteLength > 262_144) {
     return jsonResponse({ error: "request_too_large" }, 413);
   }
 
@@ -69,7 +62,12 @@ export async function handleResendWebhook(request, dependencies) {
   const type = event.type;
   const emailId = typeof event.data.email_id === "string" ? event.data.email_id : "unknown";
   const recipient = normalizeEmail(Array.isArray(event.data.to) ? event.data.to[0] : null);
-  const shouldSuppress = isPermanentBounce(type, event.data) || SUPPRESSION_EVENT_TYPES.has(type);
+  const permanentBounce =
+    type === "email.bounced" &&
+    isRecord(event.data.bounce) &&
+    event.data.bounce.type === "Permanent";
+  const shouldSuppress =
+    permanentBounce || type === "email.complained" || type === "email.suppressed";
 
   if (shouldSuppress && recipient) {
     try {
@@ -79,7 +77,7 @@ export async function handleResendWebhook(request, dependencies) {
     }
   }
 
-  if (DELIVERY_LOG_EVENT_TYPES.has(type)) {
+  if (type === "email.delivery_delayed" || type === "email.failed") {
     console.warn("resend_delivery_event", { type, emailId });
   }
   return jsonResponse({ ok: true }, 200);
@@ -90,14 +88,9 @@ function isEmailEvent(value) {
   return Boolean(
     isRecord(value) &&
       typeof value.type === "string" &&
-      value.type.startsWith(EMAIL_EVENT_PREFIX) &&
+      value.type.startsWith("email.") &&
       isRecord(value.data),
   );
-}
-
-/** @param {string} type @param {Record<string, unknown>} data */
-function isPermanentBounce(type, data) {
-  return type === "email.bounced" && isRecord(data.bounce) && data.bounce.type === "Permanent";
 }
 
 export default {

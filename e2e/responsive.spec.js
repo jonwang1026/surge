@@ -119,7 +119,7 @@ test("early-access form exposes concise consent, pending feedback, and success s
 
     await expect(
       page.getByText(
-        "By joining, you confirm you want to receive SURGE early-access and product-launch emails.",
+        "By joining, you agree to receive early-access and product-launch emails from SURGE.",
         { exact: true },
       ),
     ).toBeVisible();
