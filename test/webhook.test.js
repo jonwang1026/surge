@@ -7,7 +7,7 @@ const env = {
   SIGNUP_MODE: "preview",
   PUBLIC_SITE_URL: "https://surge-preview.vercel.app",
   RESEND_API_KEY: ["re", "test_api_key_not_real_123456"].join("_"),
-  RESEND_WEBHOOK_SECRET: ["whsec", "test_webhook_not_real_123456"].join("_"),
+  RESEND_WEBHOOK_SECRET: ["whsec", "+/".repeat(16)].join("_"),
   RESEND_FROM_EMAIL: "SURGE <onboarding@resend.dev>",
   RESEND_CONFIRM_TEMPLATE_ID: "tmpl_confirm",
   RESEND_TEST_SEGMENT_ID: "seg_test",

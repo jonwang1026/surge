@@ -67,9 +67,9 @@ function initializeSignupForm() {
   const submitLabel = submitButton.querySelector("[data-submit-label]");
   const submitSpinner = submitButton.querySelector(".submit-spinner");
   const message = form.querySelector(".form-message");
+  const panel = form.closest(".signup-panel");
   const fields = form.querySelector("[data-signup-fields]");
   const confirmation = form.querySelector("[data-signup-confirmation]");
-  const confirmationTitle = confirmation.querySelector("#confirmation-title");
   const renderedAt = form.querySelector('input[name="renderedAt"]');
   const company = form.querySelector('input[name="company"]');
   const completeEmailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
@@ -77,11 +77,13 @@ function initializeSignupForm() {
   const showFields = () => {
     fields.hidden = false;
     confirmation.hidden = true;
+    panel?.setAttribute("aria-labelledby", "early-access-title");
   };
 
   const showConfirmation = () => {
     fields.hidden = true;
     confirmation.hidden = false;
+    panel?.setAttribute("aria-labelledby", "confirmation-title");
   };
 
   const hasCompleteEmail = () =>
@@ -160,7 +162,6 @@ function initializeSignupForm() {
 
       if (response.status === 202) {
         showConfirmation();
-        confirmationTitle.focus({ preventScroll: true });
         return;
       }
       if (response.status === 400) {

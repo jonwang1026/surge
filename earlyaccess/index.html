@@ -8,9 +8,9 @@
   <meta name="theme-color" content="rgb(157, 220, 240)" />
   <meta name="robots" content="noindex, nofollow, noarchive" />
   <title>SURGE Early Access — Be the first to carry it</title>
-  <link rel="stylesheet" href="/styles.css?v=21" />
+  <link rel="stylesheet" href="/styles.css?v=22" />
   <link rel="stylesheet" href="/shared.css?v=11" />
-  <script src="/app.js?v=12" defer></script>
+  <script src="/app.js?v=14" defer></script>
   <script defer src="/_vercel/insights/script.js"></script>
 </head>
 
@@ -63,14 +63,13 @@
       </figure>
 
       <section class="signup-panel" id="early-access" aria-labelledby="early-access-title">
-        <h2 class="signup-title" id="early-access-title">Get early access</h2>
-
         <form class="signup" novalidate aria-busy="false">
-          <div data-signup-fields>
+          <div class="signup-fields" data-signup-fields>
+            <h2 class="signup-title" id="early-access-title">Get early access</h2>
             <label for="email">Email address</label>
             <div class="input-row">
               <input id="email" name="email" type="email" autocomplete="email" inputmode="email"
-                placeholder="name@example.com…" pattern="[^\s@]+@[^\s@]+\.[^\s@]{2,}"
+                placeholder="stinkybreath@example.com…" pattern="[^\s@]+@[^\s@]+\.[^\s@]{2,}"
                 aria-describedby="signup-consent form-message" spellcheck="false" required />
               <button type="submit">
                 <span data-submit-label>Join</span>
@@ -91,7 +90,7 @@
 
           <div class="signup-confirmation" data-signup-confirmation role="status" aria-live="polite"
             aria-labelledby="confirmation-title" hidden>
-            <h3 id="confirmation-title" tabindex="-1">Check your inbox.</h3>
+            <h2 id="confirmation-title">Check your inbox.</h2>
             <p>Confirm your email to join early access.</p>
           </div>
         </form>

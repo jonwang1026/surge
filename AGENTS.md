@@ -12,10 +12,14 @@ This is the canonical repository for the SURGE website, its documentation, and i
 
 ## Project skills
 
-The available project skills live in `.agents/skills/`. For any frontend design, planning, implementation, or review task that changes the user-facing interface, use these three skills together as a bundle:
+The available project skills live in `.agents/skills/`. Use these three skills together only for frontend design, planning, implementation, or review tasks that change the user-facing interface:
 
 - `frontend-design` for visual direction and subject-specific design decisions.
 - `ui-ux-pro-max` for interaction, accessibility, responsive, motion, and stack guidance.
 - `web-design-guidelines` for interface review and best-practice checks.
+
+Do not invoke the frontend bundle solely for backend, integration, testing, documentation, or general code-review changes.
+
+Before every `git push`, use the `refactor` skill to review and simplify the changed code where appropriate.
 
 `grill-with-docs` is opt-in and is used when a plan needs an interview plus current-state documentation.
